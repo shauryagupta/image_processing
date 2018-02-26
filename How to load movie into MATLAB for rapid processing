@@ -1,4 +1,4 @@
-%Filename of the series of tif files
+%Filename of the series of tif files. Make sure to replace this with whatever your filename is
 fname = 'movie1.tif';
 %Extract information about the movie
 info = imfinfo(fname);
