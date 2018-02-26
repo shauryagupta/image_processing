@@ -607,11 +607,8 @@ movieInfo = repmat(struct('xCoord',[],'yCoord',[],'amp',[]),numImagesRaw,1);
 %initialize progress display
 progressText(0,'Mixture-model fitting');
 
-% Finxing the 'goodImages' matrix for the for loop
-goodImages = goodImages';
-
 %go over all non-empty images ...
-for iImage = goodImages
+for iImage = 1 : goodImages
 
     try %try to detect features in this frame
 
@@ -637,7 +634,7 @@ for iImage = goodImages
         framesFailedMMF = [framesFailedMMF; imageIndx(iImage)];
 
     end
-    
+
     %display progress
     progressText(iImage/numImagesRaw,'Mixture-model fitting');
 
