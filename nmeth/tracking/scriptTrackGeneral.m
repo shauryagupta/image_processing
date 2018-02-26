@@ -132,7 +132,7 @@ clear parameters
 %% additional input
 
 %saveResults
-saveResults.dir = 'H:\code4paperVer2\example\'; %directory where to save input and output
+saveResults.dir = 'C:\Users\Shaurya\Desktop\image_processing\nmeth\example\'; %directory where to save input and output
 saveResults.filename = 'testTracking.mat'; %name of file where input and output are saved
 % saveResults = 0; %don't save results
 
