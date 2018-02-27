@@ -200,7 +200,7 @@ for iScheme = 1 : numSchemes
     coord1 = propagatedPos(:,:,iScheme);
 
     %calculate the distances between features
-    costMatTmp(:,:,iScheme) = createDistanceMatrix(coord1,coord2);
+    costMatTmp(:,:,iScheme) = createDistanceMatrix(coord2,coord1);
 
 end
 
