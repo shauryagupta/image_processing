@@ -49,7 +49,6 @@ Mrows = size(M,1);
 Nrows = size(N,1);
 
 Ncols = max(size(M,2),size(N,2));
-D = zeros(Nrows,Mrows);
 
 if Ncols == 1
     
@@ -76,28 +75,4 @@ elseif Ncols == 2
             mY = M(j,1);
             
             % Calculate the distace and store the value in D
-            D(i,j) = sqrt((nY-mY)^2 + (nX-mX)^2);
-        end
-    end
-    
-else
-    for i = 1:1:Nrows
-        
-        % Get the source position
-        nX = N(i,2);
-        nY = N(i,1);
-        nZ = N(i,3);
-        
-        for j = 1:1:Mrows
-            
-            % Get target position
-            mX = M(j,2);
-            mY = M(j,1);
-            mZ = M(j,3);
-            
-            % Calculate the distace and store the value in D
-            D(i,j) = sqrt((nY-mY)^2 + (nX-mX)^2 + (nZ-mZ)^2);
-        end
-    end
-end
-end
+            D(i,j) = sqrt(()^2 - ()^2)
