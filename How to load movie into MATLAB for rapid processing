@@ -1,0 +1,29 @@
+%Filename of the series of tif files. Make sure to replace this with whatever your filename is
+fname = 'movie1.tif';
+%Extract information about the movie
+info = imfinfo(fname);
+%Create a variable with the number of frames in the movie
+num_images = numel(info);
+%Initialize A as a cell array
+A=cell(num_images,1);
+%Read the images
+for k = 1:num_images
+A{k} = imread(fname, k, 'Info', info);
+end
+%First convert to greyscale then binarize the images
+for i=1:num_images
+B{i}=imbinarize(rgb2gray(A{i}));
+end
+%run this if you want to check the result of the binarization
+%for j=1:num_images
+%imshow(B{j})
+%pause(0.5)
+%end
+%From here you can filter it with whatever you want. For example:
+%%Top Hat Filtering
+%Define a structuring element
+se=strel('disk',4);
+%Filter images
+for k=1:num_images
+C{k}=imtophat(B{k},se);
+end
