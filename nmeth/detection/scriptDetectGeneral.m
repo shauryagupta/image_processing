@@ -16,7 +16,11 @@
 %Copyright Jaqaman 01/2008
 %% movie information
 
+<<<<<<< Updated upstream
 movieParam.imageDir = 'C:\Users\Shaurya\Desktop\image_processing\nmeth\example\'; %directory where images are
+=======
+movieParam.imageDir = '/Users/shauryagupta/Documents/image_processing/nmeth/example/'; %directory where images are
+>>>>>>> Stashed changes
 movieParam.filenameBase = 'crop_071017_37CLNB_'; %image file name base
 movieParam.firstImageNum = 1; %number of first image in movie
 movieParam.lastImageNum = 40; %number of last image in movie
@@ -63,7 +67,11 @@ detectionParam.visual = 0;
 
 %% save results
 
+<<<<<<< Updated upstream
 saveResults.dir = 'C:\Users\Shaurya\Desktop\image_processing\nmeth\example\'; %directory where to save input and output
+=======
+saveResults.dir = '/Users/shauryagupta/Documents/image_processing/nmeth/example/'; %directory where to save input and output
+>>>>>>> Stashed changes
 saveResults.filename = 'testDetection.mat'; %name of file where input and output are saved
 
 %% run the detection function
