@@ -12,8 +12,8 @@
    by R. Jonker and A. Volgenant, University of Amsterdam.
 *************************************************************************/
 
-#include <iostream.h>
-#include <iomanip.h>
+#include <iostream>
+#include <iomanip>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>     // for seconds()
