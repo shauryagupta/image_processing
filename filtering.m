@@ -3,20 +3,23 @@ imagefiles = dir('*.tif');
 num_images = length(imagefiles);    % Number of files found
 rawimages=cell(1,num_images);
 grayimages=cell(1,num_images);
-
+%Store each frame in "rawimages", store each frame in grayscale in "grayimages"
 for ii=1:num_images
    currentfilename = imagefiles(ii).name;
    rawimages{ii} = imread(currentfilename);
    grayimages{ii} = rgb2gray(rawimages{ii});
 end
-se=strel('disk',12);
-se2=strel('disk',5);
+%Create structuring elements
+se=strel('disk',12); %For top hat filtering
+se2=strel('disk',5); %For image opening
+%Initialize Cell arrays
 A=cell(1,num_images);
 B=cell(1,num_images);
 C=cell(1,num_images);
 D=cell(1,num_images);
 E=cell(1,num_images);
 F=cell(1,num_images);
+%Perform top hat filtering, increase contrast, binarization, and image opening. 
 for i=1:num_images
     %A{i}=imresize(images{i},2);
     C{i}=imtophat(grayimages{i},se);
@@ -27,23 +30,12 @@ for i=1:num_images
 %B{i}=imbinarize(A{i},T);
 %C{i}=imclose(B{i},se);
 end
-%Plays the series of images defined by the variable in imshow
+%Plays the series of images defined by the variable in imshow, here it is the final opened image set
 for j=1:num_images
 imshow(F{j})
 pause(0.5)
 end
-%From here you can filter it with whatever you want. For example:
-%%Top Hat Filtering
-%Define a structuring element
-%se=strel('disk',4);
-%Filter images
-%for k=1:num_images
-%C{k}=imtophat(B{k},se);
-%end
-%for j=1:num_images
-%imshow(B{j})
-%pause(0.5)
-%end
+%This is what I used to create that montage for the progress report
 %subplot(2,3,1), imshow(rawimages{1}); title('Raw', 'FontSize',16);
 %subplot(2,3,2), imshow(grayimages{1}); title('Grayscale', 'FontSize',16);
 %subplot(2,3,3), imshow(C{1}); title('Top Hat Filtering', 'FontSize',16);
