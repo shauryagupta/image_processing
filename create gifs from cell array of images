@@ -1,0 +1,18 @@
+
+for j=1:num_images
+imshow(rawimages{j})
+pause(0.5)
+M2(j)=getframe; %Stores each frame in struct M2
+end
+for idx = 1:num_images
+im{idx}=frame2im(M2(idx));
+end
+filename = 'testAnimated2.gif'; % Specify the output file name
+for idx = 1:num_images
+[A,map] = rgb2ind(im{idx},256);
+if idx == 1
+imwrite(A,map,filename,'gif','LoopCount',Inf,'DelayTime',1);
+else
+imwrite(A,map,filename,'gif','WriteMode','append','DelayTime',1);
+end
+end
