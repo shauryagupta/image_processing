@@ -1,4 +1,15 @@
-% Get list of all TIF files in working directory
+%% Detection
+% This script takes in an image dataset and then detects foreground objects
+% and isolates them from background.
+%
+% Author: Daniel Tovbis, Shaurya Gupta
+% Date: March 18th, 2018
+
+
+clear all
+close all
+
+%% Get list of all TIF files in working directory
 imagefiles = dir('*.tif');      
 num_images = length(imagefiles);    % Number of files found
 rawimages = cell(1,num_images);
@@ -13,8 +24,8 @@ for ii=1:num_images
 end
 
 % Create structuring elements
-se = strel('disk',10); %For top hat filtering
-se2 = strel('disk',5); %For image opening
+se = strel('disk',9); %For top hat filtering
+se2 = strel('disk',3); %For image opening
 
 % Initialize Cell arrays
 A=cell(1,num_images);
@@ -24,6 +35,8 @@ D=cell(1,num_images);
 E=cell(1,num_images);
 F=cell(1,num_images);
 
+%% Filtering
+
 % Perform top hat filtering, increase contrast, binarization, and 
 % image opening. 
 for i=1:num_images
@@ -31,11 +44,12 @@ for i=1:num_images
     C{i}=imtophat(grayimages{i},se);
     D{i}=imadjust(C{i});
     
-    % imbinarize not available on my computer (MATLAB 2015b)
-    %E{i}=imbinarize(D{i});
+    level = adaptthresh(D{i},0.1);
+    E{i}=imbinarize(D{i},level);
     
-    level = graythresh(D{i});
-    E{i} = im2bw(D{i},level);
+    % imbinarize not available on my computer (MATLAB 2015b)
+    %level = graythresh(D{i});
+    %E{i} = im2bw(D{i},level);
     
     F{i}=imopen(E{i},se2);
     %T=adaptthresh(A{i},0.3,'ForegroundPolarity','bright');
@@ -43,6 +57,22 @@ for i=1:num_images
 %B{i}=imbinarize(A{i},T);
 %C{i}=imclose(B{i},se);
 end
+
+%% Creating output for tracking code
+% Takes in the output cell F{} and converts it into a multidimensinonal
+% array
+
+% Create variable to store image stack
+image = zeros(size(F{1},1),size(F{1},2),num_images);
+
+for ii = 1:num_images
+    image(:,:,ii) = F{ii};
+end
+
+dest = '/Users/shauryagupta/Documents/image_processing/1 - Tracker';
+cd(dest)
+
+save('image.mat','image')
 
 %% Plays the series of images defined by the variable in imshow, 
 % here it is the final opened image set

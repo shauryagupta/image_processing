@@ -3,31 +3,30 @@
 % Author: Shaurya Gupta
 % Date: March 11th, 2018
 
-clc
-clear
+%% Read in files/data
 
-%% Read in files
+% % Get files from the Control_data folder
+% folderName = '/Users/shauryagupta/Documents/MATLAB/SimpleTracker/Control_data/';
+% cd(folderName)
+% addpath(pwd)
+% 
+% % Store file names in a variable
+% % The files are of type .png. Change value here if the input file type changes
+% imdir = dir('*.png');
+% 
+% % Create variable to store image stack
+% image = zeros(400,400,numel(imdir));
+% 
+% % Read in image files and store in variable
+% for i = 1:1:numel(imdir)
+%   imcurr = im2bw(imread(strcat(folderName,imdir(i).name)),0.5);
+%   image(:,:,i) = imcrop(imcurr,[136 46 399 399]);
+% end
+% 
+% % Go back to parent directory
+% cd ..
 
-% Get files from the Control_data folder
-folderName = '/Users/shauryagupta/Documents/MATLAB/SimpleTracker/Control_data/';
-cd(folderName)
-addpath(pwd)
-
-% Store file names in a variable
-% The files are of type .png. Change value here if the input file type changes
-imdir = dir('*.png');
-
-% Create variable to store image stack
-image = zeros(400,400,numel(imdir));
-
-% Read in image files and store in variable
-for i = 1:1:numel(imdir)
-  imcurr = im2bw(imread(strcat(folderName,imdir(i).name)),0.5);
-  image(:,:,i) = imcrop(imcurr,[136 46 399 399]);
-end
-
-% Go back to parent directory
-cd ..
+load('image.mat')
 
 %% Detecting Objectes in each frame
 % This section uses built in a MATLAB function to detect objects in a binary
@@ -37,10 +36,10 @@ cd ..
 dim = 2;
 
 % Number of frames to track points
-n_frames = 10;
+n_frames = size(image,3);
 
 % Estimate of the number of points per frame
-points_per_frame = 4;
+points_per_frame = 35;
 
 % Create variable to store points
 points = cell(n_frames,1);
@@ -75,7 +74,7 @@ for frame = 1:1:n_frames
         plot(pos(1), pos(2), 'x')
         text('Position', pos, 'String', str)
 
-        pause(0.01)
+        %pause(0.1)
     end 
 
 end
@@ -84,8 +83,8 @@ end
 % Finally! A one liner. We add some information to the output, and allow
 % gap closing to happen all the way through.
 
-max_linking_distance = 16;
-max_gap_closing = Inf;
+max_linking_distance = 10;
+max_gap_closing = 3;
 debug = true;
 
 [ tracks adjacency_tracks ] = simpletracker(points,...
