@@ -9,20 +9,20 @@
 % folderName = '/Users/shauryagupta/Documents/MATLAB/SimpleTracker/Control_data/';
 % cd(folderName)
 % addpath(pwd)
-% 
+%
 % % Store file names in a variable
 % % The files are of type .png. Change value here if the input file type changes
 % imdir = dir('*.png');
-% 
+%
 % % Create variable to store image stack
 % image = zeros(400,400,numel(imdir));
-% 
+%
 % % Read in image files and store in variable
 % for i = 1:1:numel(imdir)
 %   imcurr = im2bw(imread(strcat(folderName,imdir(i).name)),0.5);
 %   image(:,:,i) = imcrop(imcurr,[136 46 399 399]);
 % end
-% 
+%
 % % Go back to parent directory
 % cd ..
 
@@ -75,7 +75,7 @@ for frame = 1:1:n_frames
         text('Position', pos, 'String', str)
 
         %pause(0.1)
-    end 
+    end
 
 end
 
@@ -87,7 +87,7 @@ max_linking_distance = 10;
 max_gap_closing = 3;
 debug = true;
 
-[ tracks adjacency_tracks ] = simpletracker(points,...
+[ tracks adjacency_tracks ] = tracker(points,...
     'MaxLinkingDistance', max_linking_distance, ...
     'MaxGapClosing', max_gap_closing, ...
     'Debug', debug);
@@ -105,14 +105,14 @@ colors = hsv(n_tracks);
 all_points = vertcat(points{:});
 
 for i_track = 1 : n_tracks
-   
+
     % We use the adjacency tracks to retrieve the points coordinates. It
     % saves us a loop.
-    
+
     track = adjacency_tracks{i_track};
     track_points = all_points(track, :);
-    
+
     plot(track_points(:,1), track_points(:, 2), 'Color', colors(i_track, :))
     pause(0.01)
-    
+
 end
