@@ -1,4 +1,4 @@
-%% Detection
+x%% Detection
 % This script takes in an image dataset and then detects foreground objects
 % and isolates them from background.
 %
