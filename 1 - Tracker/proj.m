@@ -85,12 +85,10 @@ end
 
 max_linking_distance = 10;
 max_gap_closing = 3;
-debug = true;
 
 [ tracks adjacency_tracks ] = tracker(points,...
     'MaxLinkingDistance', max_linking_distance, ...
-    'MaxGapClosing', max_gap_closing, ...
-    'Debug', debug);
+    'MaxGapClosing', max_gap_closing);
 
 %% Plot tracks
 % We want to plot eahc track in a given color. Normally we would have to
