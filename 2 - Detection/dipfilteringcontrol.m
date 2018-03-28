@@ -35,7 +35,7 @@ for j=1:num_images
     %circ(i)=(4*pi*msr.size(i))/(msr.perimeter(i))^2;
     %end
     %msr.circularity=circ;
-    ind=find(msr.size<114); %Finds indices of objects greater than size 50 pixels
+    ind=find(msr.size<118); %Finds indices of objects greater than size 50 pixels
     msr_big=msr(ind); %Creates a new measurement array containing only the big objects
     numbig=size(msr_big.ID,2); %Counts the number of big objects
     Fsmall{j}=F{j}; %Initializes a new array that will only contain small objects
