@@ -12,20 +12,20 @@ for ii=1:num_images
    %images if the original imageset is in colour
 end
 %Initializes arrays
-C=newimar(num_images);
+Cm=newimar(num_images);
+Ct=newimar(num_images);
 D=newimar(num_images);
 E=newimar(num_images);
 F=newimar(num_images);
 Fsmall=newimar(num_images);
 points=cell(1,num_images);
-
 for i=1:num_images %This loop conducts the filtering
-    C{i}=tophat(A{i},9,'elliptic'); %Removes low intensity background signal for objects greater than given size
-    D{i}=stretch(C{i},1,99,0,255); %Adjusts the histogram to increase contrast
-    E{i}=threshold(D{i},'otsu'); %Automatically thresholds remaining image
-    F{i}=opening(E{i},3,'elliptic'); %Removes objects less than given size
+    Cm{i}=medif(A{i},8,'rectangular');
+    Ct{i}=tophat(Cm{i},24,'rectangular'); %Removes low intensity background signal for objects greater than given size
+    D{i}=stretch(Ct{i},1,99,0,255); %Adjusts the histogram to increase contrast
+    E{i}=threshold(D{i},'background'); %Automatically thresholds remaining image
+    F{i}=opening(E{i},6,'rectangular'); %Removes objects less than given size
 end
-
 for j=1:num_images
     msr=measure(F{j},[],{'Size','Perimeter','P2A','Minimum','Maximum'},[]); %Extracts image information for each object in image
     lmsr=length(msr.size); %Measures the amount of objects detected
@@ -35,28 +35,36 @@ for j=1:num_images
     %circ(i)=(4*pi*msr.size(i))/(msr.perimeter(i))^2;
     %end
     %msr.circularity=circ;
-    ind=find(msr.size>50); %Finds indices of objects greater than size 50 pixels
+    ind=find(msr.size<118); %Finds indices of objects greater than size 50 pixels
     msr_big=msr(ind); %Creates a new measurement array containing only the big objects
     numbig=size(msr_big.ID,2); %Counts the number of big objects
     Fsmall{j}=F{j}; %Initializes a new array that will only contain small objects
         for k=1:numbig %Sets the pixels containing the big objects to 0
             Fsmall{j}(msr_big.Minimum(1,k):msr_big.Maximum(1,k),msr_big.Minimum(2,k):msr_big.Maximum(2,k))=0;
         end
-        
-    msrFsmall{j}=measure(Fsmall{j},[],{'Minimum','Maximum'},[]); %Measures properties of the remaining small objects
+    msrFsmall{j}=measure(Fsmall{j},[],{'Minimum','Maximum','Size'},[]); %Measures properties of the remaining small objects
     numsmall=size(msrFsmall{j}.ID,2); %Counts the number of small objects
-    
-        for h=1:numsmall %Stores the centroids of all small objects. NOTE that this assumes that all the objects are convex (in our case, they are)
-            points{1,j}(:,1)=msrFsmall{j}.ID;
-            points{1,j}(h,2)=(msrFsmall{j}.Minimum(1,h)+msrFsmall{j}.Maximum(1,h))*0.5;
-            points{1,j}(h,3)=(msrFsmall{j}.Minimum(2,h)+msrFsmall{j}.Maximum(2,h))*0.5;
+    ind2=find(msrFsmall{j}.Minimum(2,:)==0);
+        if isempty(ind2)==0
+             msr_border{j}=msrFsmall{j}(ind2);
+             numborder=size(msr_border{j}.ID,2);
+                    for l=1:numborder %Sets the pixels containing the big objects to 0
+                        Fsmall{j}(msrFsmall{j}.Minimum(1,l):msrFsmall{j}.Maximum(1,l),msrFsmall{j}.Minimum(2,l):msrFsmall{j}.Maximum(2,l))=0;
+                    end
+            msrFsmall{j}=measure(Fsmall{j},[],{'Minimum','Maximum','Size'},[]); %Measures properties of the remaining small objects
+        end
+    newnumsmall=size(msrFsmall{j}.ID,2);
+        for h=1:newnumsmall %Stores the centroids of all small objects. NOTE that this assumes that all the objects are convex (in our case, they are)
+    points{1,j}(:,1)=msrFsmall{j}.ID;
+    points{1,j}(h,2)=(msrFsmall{j}.Minimum(1,h)+msrFsmall{j}.Maximum(1,h))*0.5;
+    points{1,j}(h,3)=(msrFsmall{j}.Minimum(2,h)+msrFsmall{j}.Maximum(2,h))*0.5;
         end
 end
 %Plays the series of images defined by the variable in imshow
-% for j=1:num_images
-% imshow(dip_array(Fsmall{j}),[]);
-% pause(0.5)
-% end
+ for j=1:num_images
+ imshow(dip_array(Fsmall{j}),[]);
+ pause(0.5)
+ end
 %% OLD CODE.
 %From here you can filter it with whatever you want. For example:
 %%Top Hat Filtering
