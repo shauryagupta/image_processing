@@ -1,4 +1,4 @@
-function [tracks adjacency_tracks] = tracker(points, varagrin)
+function [tracks adjacency_tracks] = tracker(points, varargin)
 % Tracker: This function is based on the SIMPLETRACKER implementation by
 % Jean-Yves Tinevez. This function implements a tracking algorithm to
 % link particles between frames (in addition to dealing with gaps)
@@ -44,7 +44,7 @@ function [tracks adjacency_tracks] = tracker(points, varagrin)
   p.addParamValue('MaxGapClosing', defaultMaxGapClosing, @isnumeric);
   p.addParamValue('MaxLinkingDistance', defaultMaxLinkingDistance, @isnumeric);
 
-  p.parse(varargin{:});
+  p.parse( varargin{:} );
 
   max_gap_closing = p.Results.MaxGapClosing;
   max_linking_distance = p.Results.MaxLinkingDistance;
@@ -66,8 +66,8 @@ function [tracks adjacency_tracks] = tracker(points, varagrin)
 
   for i = 1:1:(num_slices-1)
     % clears print message from previous iteration
-    fprintf(remapt('\b',1,7));
-    fprintf('%03d/%03d',i,n_slices-1);
+    fprintf(repmat('\b',1,7));
+    fprintf('%03d/%03d',i,num_slices-1);
 
     source = points{i};
     target = points{i+1};
@@ -158,7 +158,7 @@ function [tracks adjacency_tracks] = tracker(points, varagrin)
 
         % Print message to track which point was matched with which other point
         fprintf('Creating a link between point %d of frame %d and point %d of frame %d.\n',...
-        unmatched_sources{i}(k),i,unmatched_targets{j}(target_i(k),j);
+            unmatched_sources{i}(k),i,unmatched_targets{j}(target_i(k),j));
 
         % Update the adjacency matrix
         A(row_i,column_i) = 1;

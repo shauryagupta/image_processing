@@ -26,7 +26,17 @@
 % % Go back to parent directory
 % cd ..
 
-load('image.mat')
+%load('image.mat')
+
+fname = 'controlcase_2.tif';
+info = imfinfo(fname);
+num_images = numel(info);
+
+for k = 1:1:num_images
+  image_curr = imread(fname, k, 'Info', info);
+  image_bw = imbinarize(image_curr,'adaptive'); 
+  image(:,:,k) = image_bw;
+end
 
 %% Detecting Objectes in each frame
 % This section uses built in a MATLAB function to detect objects in a binary
@@ -39,7 +49,7 @@ dim = 2;
 n_frames = size(image,3);
 
 % Estimate of the number of points per frame
-points_per_frame = 35;
+points_per_frame = 4;
 
 % Create variable to store points
 points = cell(n_frames,1);
@@ -59,7 +69,7 @@ for iframe = 1:1:n_frames
   points{iframe} = frame_points;
 end
 
-%% Plot the random points
+%% Plot the points
 % We plot a 'x' at each point location, and an index of the frame they are
 % in next to the mark.
 
@@ -74,19 +84,17 @@ for frame = 1:1:n_frames
         plot(pos(1), pos(2), 'x')
         text('Position', pos, 'String', str)
 
-        %pause(0.1)
+        pause(0.1)
     end
 
 end
 
-%% Track them
-% Finally! A one liner. We add some information to the output, and allow
-% gap closing to happen all the way through.
+%% Track points
 
 max_linking_distance = 10;
 max_gap_closing = 3;
 
-[ tracks adjacency_tracks ] = tracker(points,...
+[ tracks, adjacency_tracks ] = tracker(points,...
     'MaxLinkingDistance', max_linking_distance, ...
     'MaxGapClosing', max_gap_closing);
 
