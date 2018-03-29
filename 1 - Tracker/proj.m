@@ -50,7 +50,7 @@ max_gap_closing = 3;
     'MaxGapClosing', max_gap_closing);
 
 %% Plot tracks
-% We want to plot eahc track in a given color. Normally we would have to
+% We want to plot each track in a given color. Normally we would have to
 % retrieve the points coordinates in the given |points| initiall cell
 % arrat, for each point in frame. To skip this, we simple use the
 % adjacency_tracks, that can pick points directly in the concatenated
@@ -70,6 +70,6 @@ for i_track = 1 : n_tracks
     track_points = all_points(track, :);
 
     plot(track_points(:,1), track_points(:, 2), 'Color', colors(i_track, :))
-    pause(0.01)
+    pause(0.2)
 
 end

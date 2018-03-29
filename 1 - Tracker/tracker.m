@@ -14,7 +14,7 @@ function [tracks adjacency_tracks] = tracker(points, varargin)
 % each frame of the input images (image.mat)
 %   - points must be a cell, with one cell dedicated for each frame
 %   - each cell has the following structure:
-%     |#points x_coordinate y_coordinate|
+%     |x_coordinate y_coordinate|
 %
 % /*** CHANGE BEFORE SUBMISSION ***/
 % 'MaxLinkingDistance' - a positive number, by default Inifity.
@@ -159,11 +159,11 @@ function [tracks adjacency_tracks] = tracker(points, varargin)
         % Print message to track which point was matched with which other point
         fprintf('Creating a link between point %d of frame %d and point %d of frame %d.\n',...
             unmatched_sources{i}(k),i,unmatched_targets{j}(target_i(k)),j);
-        
-        % The source line number in the adjacency matrix
+
+        % The source (row) line number in the adjacency matrix
         row_i = curr_slice_i + unmatched_sources{i}(k);
-        
-        % The target line number in the adjacency matrix
+
+        % The target (column) line number in the adjacency matrix
         column_i = curr_target_slice_i + unmatched_targets{j}(target_i(k));
 
         % Update the adjacency matrix
@@ -222,7 +222,7 @@ function [tracks adjacency_tracks] = tracker(points, varargin)
       adjacency_tracks{i} = tmp(~isnan(tmp));
     end
 
-    %% Reparse adjacency_tracks to update indices so that it refers to the points
+    % Reparse adjacency_tracks to update indices so that it refers to the points
     % in the original array.
 
     tracks = cell(n_tracks, 1);
