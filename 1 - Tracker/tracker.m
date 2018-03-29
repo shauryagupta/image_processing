@@ -158,7 +158,13 @@ function [tracks adjacency_tracks] = tracker(points, varargin)
 
         % Print message to track which point was matched with which other point
         fprintf('Creating a link between point %d of frame %d and point %d of frame %d.\n',...
-            unmatched_sources{i}(k),i,unmatched_targets{j}(target_i(k),j));
+            unmatched_sources{i}(k),i,unmatched_targets{j}(target_i(k)),j);
+        
+        % The source line number in the adjacency matrix
+        row_i = curr_slice_i + unmatched_sources{i}(k);
+        
+        % The target line number in the adjacency matrix
+        column_i = curr_target_slice_i + unmatched_targets{j}(target_i(k));
 
         % Update the adjacency matrix
         A(row_i,column_i) = 1;
@@ -171,14 +177,18 @@ function [tracks adjacency_tracks] = tracker(points, varargin)
       unmatched_sources{i}(new_target_i) = [];
 
       % Delete already matched targets so that they are not accidently changed
-      unmatched_targets{i}(new_target_i) = [];
+      unmatched_targets{j}(target_i(new_target_i)) = [];
 
       % Update current frame index
-      curr_target_slice_i = curr_target_slice_i + n_cells(i);
+      % This line broke the code
+      curr_target_slice_i = curr_target_slice_i + n_cells(j);
     end
 
+    curr_slice_i = curr_slice_i + n_cells(i);
+  end
+
     %% BUILD TRACKS: Parse Adjacecy Matrix to build tracks
-    disp('Building tracks:\n')
+    disp('Building tracks:')
 
     % Initializing holding variable
     cells_no_source = [];
@@ -212,7 +222,7 @@ function [tracks adjacency_tracks] = tracker(points, varargin)
       adjacency_tracks{i} = tmp(~isnan(tmp));
     end
 
-    % Reparse adjacency_tracks to update indices so that it refers to the points
+    %% Reparse adjacency_tracks to update indices so that it refers to the points
     % in the original array.
 
     tracks = cell(n_tracks, 1);

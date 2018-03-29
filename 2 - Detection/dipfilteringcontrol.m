@@ -1,3 +1,4 @@
+function points = dipfilteringcontrol()
 % Get list of all TIF files in working directory and store in a structure
 imagefiles = dir('*.tif');      
 num_images = length(imagefiles);    % Number of files founds
@@ -18,7 +19,7 @@ D=newimar(num_images);
 E=newimar(num_images);
 F=newimar(num_images);
 Fsmall=newimar(num_images);
-points=cell(1,num_images);
+points=cell(num_images,1);
 for i=1:num_images %This loop conducts the filtering
     Cm{i}=medif(A{i},8,'rectangular');
     Ct{i}=tophat(Cm{i},24,'rectangular'); %Removes low intensity background signal for objects greater than given size
@@ -55,16 +56,18 @@ for j=1:num_images
         end
     newnumsmall=size(msrFsmall{j}.ID,2);
         for h=1:newnumsmall %Stores the centroids of all small objects. NOTE that this assumes that all the objects are convex (in our case, they are)
-    points{1,j}(:,1)=msrFsmall{j}.ID;
-    points{1,j}(h,2)=(msrFsmall{j}.Minimum(1,h)+msrFsmall{j}.Maximum(1,h))*0.5;
-    points{1,j}(h,3)=(msrFsmall{j}.Minimum(2,h)+msrFsmall{j}.Maximum(2,h))*0.5;
+    %points{1,j}(:,1)=msrFsmall{j}.ID;
+    points{j,1}(h,1)=(msrFsmall{j}.Minimum(1,h)+msrFsmall{j}.Maximum(1,h))*0.5;
+    points{j,1}(h,2)=(msrFsmall{j}.Minimum(2,h)+msrFsmall{j}.Maximum(2,h))*0.5;
         end
 end
+
 %Plays the series of images defined by the variable in imshow
- for j=1:num_images
- imshow(dip_array(Fsmall{j}),[]);
- pause(0.5)
- end
+%  for j=1:num_images
+%  imshow(dip_array(Fsmall{j}),[]);
+%  pause(0.01)
+%  end
+end
 %% OLD CODE.
 %From here you can filter it with whatever you want. For example:
 %%Top Hat Filtering

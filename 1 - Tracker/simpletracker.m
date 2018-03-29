@@ -109,11 +109,11 @@ function [ tracks adjacency_tracks A ] = simpletracker(points, varargin)
     %% Parse arguments
     
     p = inputParser;
-    defaultDebug                = false;
+    defaultDebug                = true;
     defaultMaxGapClosing        = 3;
     defaultMaxLinkingDistance   = Inf;
-    defaultMethod               = 'Hungarian';
-    expectedMethods = { defaultMethod, 'NearestNeighbor' };
+    defaultMethod               = 'NearestNeighbor';
+    expectedMethods = { defaultMethod, 'Hungarian' };
     
     p.addParamValue('Debug', defaultDebug, @islogical);
     p.addParamValue('MaxGapClosing', defaultMaxGapClosing, @isnumeric);

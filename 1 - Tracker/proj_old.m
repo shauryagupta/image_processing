@@ -3,22 +3,71 @@
 % Author: Shaurya Gupta
 % Date: March 11th, 2018
 
-%% Read in files/data and Detect Objectes in each frame
+%% Read in files/data
+
+% % Get files from the Control_data folder
+% folderName = '/Users/shauryagupta/Documents/MATLAB/SimpleTracker/Control_data/';
+% cd(folderName)
+% addpath(pwd)
+%
+% % Store file names in a variable
+% % The files are of type .png. Change value here if the input file type changes
+% imdir = dir('*.png');
+%
+% % Create variable to store image stack
+% image = zeros(400,400,numel(imdir));
+%
+% % Read in image files and store in variable
+% for i = 1:1:numel(imdir)
+%   imcurr = im2bw(imread(strcat(folderName,imdir(i).name)),0.5);
+%   image(:,:,i) = imcrop(imcurr,[136 46 399 399]);
+% end
+%
+% % Go back to parent directory
+% cd ..
+
+%load('image.mat')
+
+fname = 'controlcase_2.tif';
+info = imfinfo(fname);
+num_images = numel(info);
+
+for k = 1:1:num_images
+  image_curr = imread(fname, k, 'Info', info);
+  image_bw = imbinarize(image_curr,'adaptive'); 
+  image(:,:,k) = image_bw;
+end
+
+%% Detecting Objectes in each frame
 % This section uses built in a MATLAB function to detect objects in a binary
 % image. The function used here is: regionprops
 
 % Dimensions for the current problem
 dim = 2;
 
-% Call Daniel's Detection code
-addpath('/Users/shauryagupta/Documents/image_processing/2 - Detection/')
-points = dipfilteringcontrol();
-
 % Number of frames to track points
-n_frames = numel(points);
+n_frames = size(image,3);
 
 % Estimate of the number of points per frame
 points_per_frame = 4;
+
+% Create variable to store points
+points = cell(n_frames,1);
+
+for iframe = 1:1:n_frames
+  % Detecting points in each frame
+  cc = bwconncomp(image(:,:,iframe));
+  stats = regionprops(cc,'Centroid');
+
+  frame_points = zeros(cc.NumObjects,dim);
+
+  for j = 1:1:cc.NumObjects
+    frame_points(j,:) = stats(j).Centroid;
+  end
+
+  % Storing value in variable
+  points{iframe} = frame_points;
+end
 
 %% Plot the points
 % We plot a 'x' at each point location, and an index of the frame they are
@@ -35,17 +84,17 @@ for frame = 1:1:n_frames
         plot(pos(1), pos(2), 'x')
         text('Position', pos, 'String', str)
 
-        pause(0.01)
+        pause(0.1)
     end
 
 end
 
 %% Track points
 
-max_linking_distance = 150;
+max_linking_distance = 10;
 max_gap_closing = 3;
 
-[tracks adjacency_tracks] = tracker(points,...
+[ tracks, adjacency_tracks ] = tracker(points,...
     'MaxLinkingDistance', max_linking_distance, ...
     'MaxGapClosing', max_gap_closing);
 
