@@ -47,9 +47,8 @@ for j=1:num_images
     numsmall=size(msrFsmall{j}.ID,2); %Counts the number of small objects
     
         for h=1:numsmall %Stores the centroids of all small objects. NOTE that this assumes that all the objects are convex (in our case, they are)
-            points{1,j}(:,1)=msrFsmall{j}.ID;
-            points{1,j}(h,2)=(msrFsmall{j}.Minimum(1,h)+msrFsmall{j}.Maximum(1,h))*0.5;
-            points{1,j}(h,3)=(msrFsmall{j}.Minimum(2,h)+msrFsmall{j}.Maximum(2,h))*0.5;
+            points{1,j}(h,1)=(msrFsmall{j}.Minimum(1,h)+msrFsmall{j}.Maximum(1,h))*0.5;
+            points{1,j}(h,2)=(msrFsmall{j}.Minimum(2,h)+msrFsmall{j}.Maximum(2,h))*0.5;
         end
 end
 %Plays the series of images defined by the variable in imshow
