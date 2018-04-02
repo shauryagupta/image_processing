@@ -1,4 +1,4 @@
-function [adjacency_tracks] = tracker(points, varargin)
+function [tracks adjacency_tracks] = tracker(points, varargin)
 % Tracker: This function is based on the SIMPLETRACKER implementation by
 % Jean-Yves Tinevez. This function implements a tracking algorithm to
 % link particles between frames (in addition to dealing with gaps)
@@ -220,5 +220,34 @@ function [adjacency_tracks] = tracker(points, varargin)
       end
 
       adjacency_tracks{i} = tmp(~isnan(tmp));
+    end
+
+    % Reparse adjacency_tracks to update indices so that it refers to the points
+    % in the original array.
+
+    tracks = cell(n_tracks, 1);
+
+    for i = 1:1:n_tracks
+      adjacency_track = adjacency_tracks{i};
+      track = NaN(num_slices, 1);
+
+      for j = 1:1:numel(adjacency_track)
+        cell_i = adjacency_track(j);
+
+        % Determine the corresponding frame for the index j
+        tmp_i = cell_i;
+        frame_i = 1;
+
+        while tmp_i > 0
+          tmp_i = tmp_i - n_cells(frame_i);
+          frame_i = frame_i + 1;
+        end
+
+        frame_i = frame_i - 1;
+        in_frame_cell_i = tmp_i + n_cells(frame_i);
+
+        track(frame_i) = in_frame_cell_i;
+      end
+      tracks{i} = track;
     end
   end

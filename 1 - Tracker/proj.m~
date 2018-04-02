@@ -12,7 +12,7 @@ dim = 2;
 
 % Call Daniel's Detection code
 addpath('/Users/shauryagupta/Documents/image_processing/2 - Detection/')
-points = dipfiltering();
+points = dipfilteringcont();
 
 % Number of frames to track points
 n_frames = numel(points);

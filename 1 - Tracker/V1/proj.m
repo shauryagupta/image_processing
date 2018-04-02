@@ -12,7 +12,7 @@ dim = 2;
 
 % Call Daniel's Detection code
 addpath('/Users/shauryagupta/Documents/image_processing/2 - Detection/')
-points = dipfiltering();
+points = dipfilteringcontrol();
 
 % Number of frames to track points
 n_frames = numel(points);
@@ -45,7 +45,7 @@ end
 max_linking_distance = 150;
 max_gap_closing = 3;
 
-[adjacency_tracks] = tracker(points,...
+[tracks adjacency_tracks] = tracker(points,...
     'MaxLinkingDistance', max_linking_distance, ...
     'MaxGapClosing', max_gap_closing);
 
