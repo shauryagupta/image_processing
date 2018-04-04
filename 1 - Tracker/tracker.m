@@ -1,6 +1,5 @@
 function [adjacency_tracks] = tracker(points, varargin)
-% Tracker: This function is based on the SIMPLETRACKER implementation by
-% Jean-Yves Tinevez. This function implements a tracking algorithm to
+% Tracker: This function implements a tracking algorithm to
 % link particles between frames (in addition to dealing with gaps)
 %
 % Dependencies: In additon to the parameters outlined above, this code requires
@@ -16,23 +15,27 @@ function [adjacency_tracks] = tracker(points, varargin)
 %   - each cell has the following structure:
 %     |x_coordinate y_coordinate|
 %
-% /*** CHANGE BEFORE SUBMISSION ***/
-% 'MaxLinkingDistance' - a positive number, by default Inifity.
-% Defines a maximal distance for particle linking. Two particles will not
-% be linked (even if they are the remaining closest pair) if their distance
-% is larger than this value. By default, it is infinite, not preventing nay
-% linking.
+% 'MaxLinkingDistance'
+% This variable defines a maximum distance between objects to prevent linking.
+% Thus, even if the particles are the remaining closest pair, they will not
+% be linked if the distance between them is larger than the value specified by
+% MaxLinkingDistance.
+% By default, the value is set to infinity in order to promote linking.
 %
-% 'MaxGapClosing' - a positive integer, by default 3
-% Defines a maximal frame distance in gap-closing. Frames further way than
-% this value will not be investigated for gap closing. By default, it has
-% the value of 3.
-% /*** CHANGE BEFORE SUBMISSION ***/
+% 'MaxGapClosing'
+% This variable defines the maximum number of frames that the object can be
+% lost before it is considered as a new object.
+% i.e. If an object disapprears in a frame and reapprears in a frame that is
+% less than 'MaxGapClosing' frames away from the starting frame, then the
+% object in condideration will be linked. Otherwise, the object in the
+% subsequent frame will be considered as a new object.
+% By default, the value of this variable is set to 3.
 %
 % Output parameters:
-% /*** CHANGE BEFORE SUBMISSION ***/
-% Enter description text
-% /*** CHANGE BEFORE SUBMISSION ***/
+% 'adjacency_tracks'
+% This variable is a n x 1 cell array, where n is the total number of
+% tracks. Each cell in the cell array contains the indices for the detected
+% points in the order that they were detected by the detection algorithm.
 
   % Parse parameters
   p = inputParser;
@@ -104,7 +107,6 @@ function [adjacency_tracks] = tracker(points, varargin)
       % Update index
       index = index + 1;
     end
-
     curr_slice_i = curr_slice_i + n_cells(i);
   end
 
@@ -183,42 +185,39 @@ function [adjacency_tracks] = tracker(points, varargin)
       % This line broke the code
       curr_target_slice_i = curr_target_slice_i + n_cells(j);
     end
-
     curr_slice_i = curr_slice_i + n_cells(i);
   end
 
-    %% BUILD TRACKS: Parse Adjacecy Matrix to build tracks
-    disp('Building tracks:')
+  %% BUILD TRACKS: Parse Adjacecy Matrix to build tracks
+  disp('Building Tracks')
 
-    % Initializing holding variable
-    cells_no_source = [];
+  % Initializing holding variable
+  cells_no_source = [];
 
-    % Finding columns that contain 0: indicates that the cell has no source
-    for i = 1:1:size(A,2)
-      if length(find(A(:,i))) == 0
-        cells_no_source = [cells_no_source; i];
-      end
-    end
-
-    % Initializing varibales
-    n_tracks = numel(cells_no_source);
-    adjacency_tracks = cell(n_tracks,1);
-
-    A_t = A';
-
-    for i = 1:1:n_tracks
-      tmp = NaN(n_cells_total,1);
-      target = cells_no_source(i);
-
-      index = 1;
-      while ~isempty(target)
-        tmp(index) = target;
-        target = find(A_t(:,target), 1, 'first');
-
-        % Update index
-        index = index + 1;
-      end
-
-      adjacency_tracks{i} = tmp(~isnan(tmp));
+  % Finding columns that contain 0: indicates that the cell has no source
+  for i = 1:1:size(A,2)
+    if length(find(A(:,i))) == 0
+      cells_no_source = [cells_no_source; i];
     end
   end
+
+  % Initializing varibales
+  n_tracks = numel(cells_no_source);
+  adjacency_tracks = cell(n_tracks,1);
+  A_t = A';
+
+  for i = 1:1:n_tracks
+    tmp = NaN(n_cells_total,1);
+    target = cells_no_source(i);
+
+    index = 1;
+    while ~isempty(target)
+      tmp(index) = target;
+      target = find(A_t(:,target), 1, 'first');
+      % Update index
+      index = index + 1;
+    end
+    adjacency_tracks{i} = tmp(~isnan(tmp));
+  end
+  disp('Building Complete')
+end
