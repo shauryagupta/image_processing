@@ -105,5 +105,3 @@ end
 %subplot(2,3,4), imshow(D{1});  title('Contrast Adjustment', 'FontSize',16);
 %subplot(2,3,5), imshow(imbinarize(D{1})); title('Binarization', 'FontSize',16);
 %subplot(2,3,6), imshow(imopen(imbinarize(D{1}),se2)); title('Morphological Opening', 'FontSize',16)
-end
-
