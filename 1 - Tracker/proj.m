@@ -36,7 +36,8 @@ dip_initialise
 % where 'x' and 'y' are the x and y coordinates of the centroids of the detected
 % points in the cartesian coordinate reference frame
 addpath('/Users/shauryagupta/Documents/image_processing/2 - Detection/')
-points = dipfilteringcontrol();
+path('/Users/shauryagupta/Documents/image_processing/Dataset/crop4');
+points = dipfiltering(path);
 
 % Number of frames to track points
 n_frames = numel(points);
