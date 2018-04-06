@@ -1,6 +1,9 @@
-function points = dipfilteringcontrol()
+function points=dipfilteringcontrol(name)
+
 % Get list of all TIF files in working directory and store in a structure
-imagefiles = dir('*.tif');      
+currentdir=pwd;
+wdir=strcat([currentdir,'/',name,'/']);
+imagefiles = dir(strcat([wdir,'*.tif']));
 num_images = length(imagefiles);    % Number of files founds
 A=newimar(num_images); %Initializes array of images
 %grayimages=newimar(num_images); %This creates an array of gray images if
@@ -8,7 +11,7 @@ A=newimar(num_images); %Initializes array of images
 
 for ii=1:num_images
    currentfilename = imagefiles(ii).name; %Extracts the filename
-   A{ii} = readim(currentfilename); %Loads in the image with the given filename to array "A"
+   A{ii} = readim(strcat([wdir,currentfilename])); %Loads in the image with the given filename to array "A"
    %grayimages{ii} = a{2}; %This would extract the green layer of the
    %images if the original imageset is in colour
 end

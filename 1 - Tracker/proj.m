@@ -36,8 +36,8 @@ dip_initialise
 % where 'x' and 'y' are the x and y coordinates of the centroids of the detected
 % points in the cartesian coordinate reference frame
 addpath('/Users/shauryagupta/Documents/image_processing/2 - Detection/')
-path('crop4');
-points = dipfiltering(path);
+name = 'control';
+points = dipfilteringcontrol(name);
 
 % Number of frames to track points
 n_frames = numel(points);
@@ -109,8 +109,8 @@ max_linking_distance = 150;
 max_gap_closing = 3;
 
 % Real Data
-% max_linking_distance = 50;
-% max_gap_closing = 1;
+%max_linking_distance = 10;
+%max_gap_closing = 1;
 
 [adjacency_tracks] = tracker(points,...
     'MaxLinkingDistance', max_linking_distance, ...
