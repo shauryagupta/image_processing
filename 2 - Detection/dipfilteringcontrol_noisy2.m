@@ -1,6 +1,9 @@
-function points=dipfilteringcontrol()
+function points=dipfilteringcontrol_noisy2(name)
+
 % Get list of all TIF files in working directory and store in a structure
-imagefiles = dir('*.tif');      
+currentdir=pwd;
+wdir=strcat([currentdir,'/',name,'/']);
+imagefiles = dir(strcat([wdir,'*.tif']));
 num_images = length(imagefiles);    % Number of files founds
 A=newimar(num_images); %Initializes array of images
 %grayimages=newimar(num_images); %This creates an array of gray images if
@@ -8,7 +11,7 @@ A=newimar(num_images); %Initializes array of images
 
 for ii=1:num_images
    currentfilename = imagefiles(ii).name; %Extracts the filename
-   A{ii} = readim(currentfilename); %Loads in the image with the given filename to array "A"
+   A{ii} = readim(strcat([wdir,currentfilename])); %Loads in the image with the given filename to array "A"
    %grayimages{ii} = a{2}; %This would extract the green layer of the
    %images if the original imageset is in colour
 end
@@ -41,7 +44,7 @@ for j=1:num_images
     if isempty(ind)==0
     msr_big=msr(ind); %Creates a new measurement array containing only the big objects
     numbig=size(msr_big.ID,2); %Counts the number of big objects
-   
+
         for k=1:numbig %Sets the pixels containing the big objects to 0
             Fsmall{j}(msr_big.Minimum(1,k):msr_big.Maximum(1,k),msr_big.Minimum(2,k):msr_big.Maximum(2,k))=0;
         end
@@ -66,8 +69,8 @@ for j=1:num_images
 end
 
 %Plays the series of images defined by the variable in imshow
-  for j=1:num_images
-  imshow(dip_array(Fsmall{j}),[]);
-  pause(0.01)
-  end
+  % for j=1:num_images
+  % imshow(dip_array(Fsmall{j}),[]);
+  % pause(0.01)
+  % end
 end
