@@ -1,5 +1,4 @@
 function points=dipfiltering(name)
-
 % Get list of all TIF files in working directory and store in a structure
 currentdir=pwd;
 wdir=strcat([currentdir,'/',name,'/']);
@@ -39,8 +38,19 @@ elseif strcmpi(name,'crop1')==1
     opensize=3;
     largesize=40;
     smallsize=15;
+elseif or(strcmpi(name,'MExt1')==1,strcmpi(name,'MExt2')==1)==1
+    for j=1:num_images
+        A{j}=threshold(A{j},'otsu');
+        msrA{j}=measure(A{j},[],{'Center','Size'},[]); %Measures properties of the remaining objects
+        numpoints=size(msrA{j}.ID,2); %Counts the number of objects
+            for h=1:numpoints %Stores the centroids of all objects.
+                points{1,j}(h,1)=(msrA{j}.Center(1,h));
+                points{1,j}(h,2)=(msrA{j}.Center(2,h));
+            end
+    end
+return
 else
-    error('Invalid Folder. This code is only meant to run on crop1, crop4, or greatmovie.')
+    error('Invalid Folder. This code is only meant to run on crop1, crop4, MEXt 1, MExt2 or greatmovie.')
 end
 for i=1:num_images %This loop conducts the filtering
     C{i}=tophat(A{i},thsize,'elliptic'); %Removes low intensity background signal for objects greater than given size
@@ -70,11 +80,11 @@ for j=1:num_images
             Fsmall{j}(msr_bigandsmall.Minimum(1,k):msr_bigandsmall.Maximum(1,k),msr_bigandsmall.Minimum(2,k):msr_bigandsmall.Maximum(2,k))=0;
         end
     end
-    msrFsmall{j}=measure(Fsmall{j},[],{'Center','Size'},[]); %Measures properties of the remaining objects
-    numsmall=size(msrFsmall{j}.ID,2); %Counts the number of objects
+    msrA{j}=measure(Fsmall{j},[],{'Center','Size'},[]); %Measures properties of the remaining objects
+    numsmall=size(msrA{j}.ID,2); %Counts the number of objects
         for h=1:numsmall %Stores the centroids of all objects.
-    points{1,j}(h,1)=(msrFsmall{j}.Center(1,h));
-    points{1,j}(h,2)=(msrFsmall{j}.Center(2,h));
+    points{1,j}(h,1)=(msrA{j}.Center(1,h));
+    points{1,j}(h,2)=(msrA{j}.Center(2,h));
         end
 end
 %Plays the series of images defined by the variable in imshow
@@ -83,6 +93,7 @@ end
 % pause(0.5)
 %end
 end
+<<<<<<< HEAD
 
 
      %% OLD CODE.
@@ -105,3 +116,5 @@ end
 %subplot(2,3,4), imshow(D{1});  title('Contrast Adjustment', 'FontSize',16);
 %subplot(2,3,5), imshow(imbinarize(D{1})); title('Binarization', 'FontSize',16);
 %subplot(2,3,6), imshow(imopen(imbinarize(D{1}),se2)); title('Morphological Opening', 'FontSize',16)
+=======
+>>>>>>> master
