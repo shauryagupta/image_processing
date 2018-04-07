@@ -36,8 +36,8 @@ dip_initialise
 % where 'x' and 'y' are the x and y coordinates of the centroids of the detected
 % points in the cartesian coordinate reference frame
 addpath('/Users/shauryagupta/Documents/image_processing/2 - Detection/')
-name = 'crop4';
-points = dipfiltering(name);
+name = 'mExt2';
+points = dipfilteringnew(name);
 
 % Number of frames to track points
 n_frames = numel(points);
@@ -61,7 +61,7 @@ for frame = 1:1:n_frames
     ylabel('Y Position')
     title('Detected Objects in All Frames of Dataset')
 end
-hold off
+ hold off
 
 % The second plot is produced to visualize the path or 'tracks' of the detected
 % object as it moves from the first frame to the last frame. Here, 'x' marks the
@@ -109,8 +109,8 @@ end
 %max_gap_closing = 2;
 
 % Real Data
-max_linking_distance = 12;
-max_gap_closing = 3;
+max_linking_distance = 55;
+max_gap_closing = 6;
 
 [adjacency_tracks] = tracker(points,...
     'MaxLinkingDistance', max_linking_distance, ...
@@ -141,5 +141,5 @@ for i_track = 1 : n_tracks
     % Picking out all the points in a particular track
     track_points = all_points(track, :);
 
-    plot(track_points(:,1), track_points(:, 2), 'Color', colors(i_track, :))
+    plot(track_points(:,1), track_points(:, 2), 'Color', colors(i_track, :),'LineWidth',2)
 end

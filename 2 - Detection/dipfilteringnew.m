@@ -1,7 +1,7 @@
 function points=dipfilteringnew(name)
 % Get list of all TIF files in working directory and store in a structure
 currentdir=pwd;
-wdir=strcat([currentdir,'\',name,'\']);
+wdir=strcat([currentdir,'/',name,'/']);
 imagefiles = dir(strcat([wdir,'*.tif']));      
 num_images = length(imagefiles);    % Number of files founds
 A=newimar(num_images); %Initializes array of images
@@ -88,8 +88,8 @@ for j=1:num_images
         end
 end
 %Plays the series of images defined by the variable in imshow
-for j=1:num_images
-imshow(dip_array(Fsmall{j}),[]);
-pause(0.5)
-end
+% for j=1:num_images
+% imshow(dip_array(Fsmall{j}),[]);
+% pause(0.5)
+% end
 end
