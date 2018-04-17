@@ -6,7 +6,6 @@
 % 1) DIP Image
 % 2) dipfiltering.m
 % 3) tracker.m
-% 4) nearestneighborlinker.m
 
 % Author: Shaurya Gupta
 % Date: March 11th, 2018
